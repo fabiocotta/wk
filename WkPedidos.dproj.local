@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2025/09/02 14:17:23.000.018,C:\dev\teste\WkPedidos.dproj=C:\dev\teste\WkVenda.dproj</Transaction>
+    <Transaction>2025/09/02 14:17:47.000.218,=C:\dev\teste\Unit1.pas</Transaction>
+    <Transaction>2025/09/02 14:19:09.000.767,=C:\dev\teste\Pedido\GUI\untPrincipal.pas</Transaction>
+    <Transaction>2025/09/02 14:23:30.000.295,=C:\dev\teste\untPrincipal.pas</Transaction>
+    <Transaction>2025/09/02 14:27:19.000.725,C:\dev\teste\untPrincipal.pas=</Transaction>
+    <Transaction>2025/09/02 14:27:26.000.929,=C:\dev\teste\Unit1.pas</Transaction>
+    <Transaction>2025/09/02 14:28:15.000.756,C:\dev\teste\Unit1.pas=C:\dev\teste\Pedido\GUI\Principal.GUI.pas</Transaction>
+    <Transaction>2025/09/02 14:28:15.000.756,C:\dev\teste\Unit1.dfm=C:\dev\teste\Pedido\GUI\Principal.GUI.dfm</Transaction>
+    <Transaction>2025/09/02 14:34:56.000.909,=C:\dev\teste\Util\Vcl.Navigation.pas</Transaction>
+  </Transactions>
+</BorlandProject>
