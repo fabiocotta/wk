@@ -15,7 +15,9 @@ object frmPedidoGUI: TfrmPedidoGUI
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  KeyPreview = True
   Position = poDefault
+  OnKeyDown = FormKeyDown
   OnShow = FormShow
   TextHeight = 15
   object pnlDados: TPanel
@@ -313,7 +315,6 @@ object frmPedidoGUI: TfrmPedidoGUI
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 630
     object SpeedButton1: TSpeedButton
       AlignWithMargins = True
       Left = 745
@@ -345,14 +346,13 @@ object frmPedidoGUI: TfrmPedidoGUI
       Color = 6906591
       ParentBackground = False
       TabOrder = 0
-      ExplicitLeft = 100
       object btnExcluirPedido: TSpeedButton
         Left = 0
         Top = 0
         Width = 133
         Height = 68
         Align = alClient
-        Caption = 'Excluir Pedido'
+        Caption = 'Excluir Pedido'#13#10'[ F5 ]'
         Flat = True
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -386,7 +386,7 @@ object frmPedidoGUI: TfrmPedidoGUI
         Width = 130
         Height = 68
         Align = alClient
-        Caption = 'Gravar Pedido'
+        Caption = 'Gravar Pedido'#13#10'[ F9 ]'
         Flat = True
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -409,7 +409,7 @@ object frmPedidoGUI: TfrmPedidoGUI
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 3
-    object DBGrid1: TDBGrid
+    object grdProduto: TDBGrid
       Left = 0
       Top = 0
       Width = 875
@@ -423,7 +423,8 @@ object frmPedidoGUI: TfrmPedidoGUI
       TitleFont.Height = -12
       TitleFont.Name = 'Segoe UI'
       TitleFont.Style = []
-      OnDblClick = DBGrid1DblClick
+      OnDblClick = grdProdutoDblClick
+      OnKeyDown = grdProdutoKeyDown
       Columns = <
         item
           Expanded = False
@@ -477,7 +478,6 @@ object frmPedidoGUI: TfrmPedidoGUI
     Color = 16051947
     ParentBackground = False
     TabOrder = 4
-    ExplicitTop = 558
     object Panel4: TPanel
       Left = 547
       Top = 1

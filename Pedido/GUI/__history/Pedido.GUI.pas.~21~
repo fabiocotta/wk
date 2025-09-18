@@ -26,10 +26,8 @@ type
     pnlHeader: TPanel;
     pnlBotoes: TPanel;
     SpeedButton1: TSpeedButton;
-    Label1: TLabel;
+    lblNumeroPedido: TLabel;
     edtNumeroPedido: TEdit;
-    btConsultaPedido: TButton;
-    btCancelarPedido: TButton;
     Label2: TLabel;
     dtpDataEmissao: TDateTimePicker;
     boxCliente: TGroupBox;
@@ -46,16 +44,22 @@ type
     edtValorUnitario: TEdit;
     Label6: TLabel;
     edtQuantidade: TEdit;
-    Panel1: TPanel;
-    Panel3: TPanel;
+    pnl: TPanel;
+    pnlValor: TPanel;
     DBGrid1: TDBGrid;
     Panel2: TPanel;
     btAdicionar: TButton;
     btRemover: TButton;
-    btnGravarPedido: TSpeedButton;
     Panel4: TPanel;
     Label9: TLabel;
     edtValorTotalPedido: TEdit;
+    Label8: TLabel;
+    Panel5: TPanel;
+    btnConsultaPedido: TSpeedButton;
+    pnlBtnExcluir: TPanel;
+    btnExcluirPedido: TSpeedButton;
+    pnlBtnGravar: TPanel;
+    btnGravarPedido: TSpeedButton;
     procedure btClienteClick(Sender: TObject);
     procedure edtClienteCodigoExit(Sender: TObject);
     procedure edtClienteCodigoKeyPress(Sender: TObject; var Key: Char);
@@ -68,14 +72,14 @@ type
     procedure btRemoverClick(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
     procedure btGravarPedidoClick(Sender: TObject);
-    procedure btConsultaPedidoClick(Sender: TObject);
     procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
-    procedure btCancelarPedidoClick(Sender: TObject);
     procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure CdsPedidoProdutoAfterDelete(DataSet: TDataSet);
     procedure SpeedButton1Click(Sender: TObject);
     procedure btnGravarPedidoClick(Sender: TObject);
+    procedure btnExcluirPedidoClick(Sender: TObject);
+    procedure btnConsultaPedidoClick(Sender: TObject);
   private
     { Private declarations }
     FCodigoPedidoProduto: Integer;
@@ -123,7 +127,47 @@ begin
   end;
 end;
 
-procedure TfrmPedidoGUI.btCancelarPedidoClick(Sender: TObject);
+procedure TfrmPedidoGUI.btClienteClick(Sender: TObject);
+var
+  lFrmClienteConsultaGUI : TfrmClienteConsultaGUI;
+  lCliente: TClienteDominio;
+begin
+  lCliente := TClienteDominio.Create;
+  lFrmClienteConsultaGUI := TfrmClienteConsultaGUI.Create(self, lCliente);
+  try
+    if lFrmClienteConsultaGUI.ShowModal = mrOk then
+    begin
+      edtClienteCodigo.Text := lCliente.Codigo.ToString;
+      edtClienteNome.Text := lCliente.Nome
+    end;
+  finally
+    FreeAndNil(lCliente);
+    FreeAndNil(lFrmClienteConsultaGUI);
+  end;
+end;
+
+procedure TfrmPedidoGUI.btGravarPedidoClick(Sender: TObject);
+var
+  lPedidoControlador: TPedidoControlador;
+  lPedido: TPedidoDominio;
+begin
+  inherited;
+  lPedidoControlador := TPedidoControlador.Create;
+  lPedido := TPedidoDominio.Create;
+  try
+    PopularObjetos(lPedido);
+    lPedidoControlador.Salvar(lPedido);
+    edtNumeroPedido.Text := lPedido.NumeroPedido.ToString;
+    MessageDlg('Pedido de Numero: '+lPedido.NumeroPedido.ToString+
+      ' salva com sucesso !', TMsgDlgType.mtInformation, [mbOK], 0);
+    LimpaCampos;
+  finally
+    FreeAndNil(lPedido);
+    FreeAndNil(lPedidoControlador);
+  end;
+end;
+
+procedure TfrmPedidoGUI.btnExcluirPedidoClick(Sender: TObject);
 var
   lFrmPedidoConsultaGUI : TfrmPedidoConsultaGUI;
   lPedido: TPedidoDominio;
@@ -158,80 +202,6 @@ begin
     FreeAndNil(lPedido);
     FreeAndNil(lPedidoControlador);
     FreeAndNil(lFrmPedidoConsultaGUI);
-  end;
-end;
-
-procedure TfrmPedidoGUI.btClienteClick(Sender: TObject);
-var
-  lFrmClienteConsultaGUI : TfrmClienteConsultaGUI;
-  lCliente: TClienteDominio;
-begin
-  lCliente := TClienteDominio.Create;
-  lFrmClienteConsultaGUI := TfrmClienteConsultaGUI.Create(self, lCliente);
-  try
-    if lFrmClienteConsultaGUI.ShowModal = mrOk then
-    begin
-      edtClienteCodigo.Text := lCliente.Codigo.ToString;
-      edtClienteNome.Text := lCliente.Nome
-    end;
-  finally
-    FreeAndNil(lCliente);
-    FreeAndNil(lFrmClienteConsultaGUI);
-  end;
-end;
-
-procedure TfrmPedidoGUI.btConsultaPedidoClick(Sender: TObject);
-var
-  lFrmPedidoConsultaGUI : TfrmPedidoConsultaGUI;
-  lPedido: TPedidoDominio;
-  lPedidoControlador: TPedidoControlador;
-begin
-  lPedido := TPedidoDominio.Create;
-  lPedidoControlador := TPedidoControlador.Create;
-  lFrmPedidoConsultaGUI := TfrmPedidoConsultaGUI.Create(self, lPedido, otpConsulta);
-  try
-    if lFrmPedidoConsultaGUI.ShowModal = mrOk then
-    begin
-      try
-        LimpaCampos;
-        lPedidoControlador.ObterPedido(lPedido.NumeroPedido, lPedido);
-        if lPedido.NumeroPedido = 0 then
-          MessageDlg('Numero do pedido não encontrado!', TMsgDlgType.mtWarning, [mbOK], 0)
-        else
-          PopularControles(lPedido);
-      except
-        on E: Exception do
-        begin
-          MessageDlg('Erro ao consultar pedido de numero '+lPedido.NumeroPedido.ToString+
-            ' ! mensagem tecnica: '+E.Message, TMsgDlgType.mtError, [mbOK], 0);
-        end;
-      end;
-    end;
-  finally
-    FreeAndNil(lPedido);
-    FreeAndNil(lPedidoControlador);
-    FreeAndNil(lFrmPedidoConsultaGUI);
-  end;
-end;
-
-procedure TfrmPedidoGUI.btGravarPedidoClick(Sender: TObject);
-var
-  lPedidoControlador: TPedidoControlador;
-  lPedido: TPedidoDominio;
-begin
-  inherited;
-  lPedidoControlador := TPedidoControlador.Create;
-  lPedido := TPedidoDominio.Create;
-  try
-    PopularObjetos(lPedido);
-    lPedidoControlador.Salvar(lPedido);
-    edtNumeroPedido.Text := lPedido.NumeroPedido.ToString;
-    MessageDlg('Pedido de Numero: '+lPedido.NumeroPedido.ToString+
-      ' salva com sucesso !', TMsgDlgType.mtInformation, [mbOK], 0);
-    LimpaCampos;
-  finally
-    FreeAndNil(lPedido);
-    FreeAndNil(lPedidoControlador);
   end;
 end;
 
@@ -388,8 +358,8 @@ var
   lFlag : boolean;
 begin
   lFlag := Trim(edtClienteCodigo.Text) = '';
-  btConsultaPedido.Visible := lFlag;
-  btCancelarPedido.Visible := lFlag;
+  btnConsultaPedido.Visible := lFlag;
+  //btnExcluirPedido.Visible := lFlag;
   if Trim(edtClienteCodigo.Text) <> '' then
     CarregarCliente;
 end;
@@ -427,8 +397,8 @@ begin
   dtpDataEmissao.DateTime := now;
   FCodigoPedidoProduto := 0;
   edtNumeroPedido.Text := '0';
-  btConsultaPedido.Visible := True;
-  btCancelarPedido.Visible := True
+  btnConsultaPedido.Visible := True;
+  btnExcluirPedido.Visible := True
 end;
 
 procedure TfrmPedidoGUI.LimpaCampos;
@@ -512,6 +482,40 @@ end;
 procedure TfrmPedidoGUI.SpeedButton1Click(Sender: TObject);
 begin
   LimpaCampos;
+end;
+
+procedure TfrmPedidoGUI.btnConsultaPedidoClick(Sender: TObject);
+var
+  lFrmPedidoConsultaGUI : TfrmPedidoConsultaGUI;
+  lPedido: TPedidoDominio;
+  lPedidoControlador: TPedidoControlador;
+begin
+   lPedido := TPedidoDominio.Create;
+  lPedidoControlador := TPedidoControlador.Create;
+  lFrmPedidoConsultaGUI := TfrmPedidoConsultaGUI.Create(self, lPedido, otpConsulta);
+  try
+    if lFrmPedidoConsultaGUI.ShowModal = mrOk then
+    begin
+      try
+        LimpaCampos;
+        lPedidoControlador.ObterPedido(lPedido.NumeroPedido, lPedido);
+        if lPedido.NumeroPedido = 0 then
+          MessageDlg('Numero do pedido não encontrado!', TMsgDlgType.mtWarning, [mbOK], 0)
+        else
+          PopularControles(lPedido);
+      except
+        on E: Exception do
+        begin
+          MessageDlg('Erro ao consultar pedido de numero '+lPedido.NumeroPedido.ToString+
+            ' ! mensagem tecnica: '+E.Message, TMsgDlgType.mtError, [mbOK], 0);
+        end;
+      end;
+    end;
+  finally
+    FreeAndNil(lPedido);
+    FreeAndNil(lPedidoControlador);
+    FreeAndNil(lFrmPedidoConsultaGUI);
+  end;
 end;
 
 function TfrmPedidoGUI.VerificaCamposPedidoProduto: boolean;

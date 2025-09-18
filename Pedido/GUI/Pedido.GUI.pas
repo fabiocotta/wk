@@ -46,7 +46,7 @@ type
     edtQuantidade: TEdit;
     pnl: TPanel;
     pnlValor: TPanel;
-    DBGrid1: TDBGrid;
+    grdProduto: TDBGrid;
     Panel2: TPanel;
     btAdicionar: TButton;
     btRemover: TButton;
@@ -70,16 +70,17 @@ type
     procedure FormShow(Sender: TObject);
     procedure CdsPedidoProdutoAfterPost(DataSet: TDataSet);
     procedure btRemoverClick(Sender: TObject);
-    procedure DBGrid1DblClick(Sender: TObject);
+    procedure grdProdutoDblClick(Sender: TObject);
     procedure btGravarPedidoClick(Sender: TObject);
     procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
-    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+    procedure grdProdutoKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure CdsPedidoProdutoAfterDelete(DataSet: TDataSet);
     procedure SpeedButton1Click(Sender: TObject);
     procedure btnGravarPedidoClick(Sender: TObject);
     procedure btnExcluirPedidoClick(Sender: TObject);
     procedure btnConsultaPedidoClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
     FCodigoPedidoProduto: Integer;
@@ -124,6 +125,7 @@ begin
     PopularCdsPedidoProduto;
     cdsPedidoProduto.Post;
     LimpaCamposPedidoProdutos;
+    edtProdutoCodigo.SetFocus;
   end;
 end;
 
@@ -214,6 +216,9 @@ begin
   lPedidoControlador := TPedidoControlador.Create;
   lPedido := TPedidoDominio.Create;
   try
+    if cdsPedidoProduto.IsEmpty then
+    exit;
+
     PopularObjetos(lPedido);
     lPedidoControlador.Salvar(lPedido);
     edtNumeroPedido.Text := lPedido.NumeroPedido.ToString;
@@ -335,12 +340,12 @@ begin
   CalculaValorTotalPedido;
 end;
 
-procedure TfrmPedidoGUI.DBGrid1DblClick(Sender: TObject);
+procedure TfrmPedidoGUI.grdProdutoDblClick(Sender: TObject);
 begin
   AlterarItemPedidoProduto;
 end;
 
-procedure TfrmPedidoGUI.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+procedure TfrmPedidoGUI.grdProdutoKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if (Key = VK_DELETE) then
@@ -359,7 +364,7 @@ var
 begin
   lFlag := Trim(edtClienteCodigo.Text) = '';
   btnConsultaPedido.Visible := lFlag;
-  btnExcluirPedido.Visible := lFlag;
+  //btnExcluirPedido.Visible := lFlag;
   if Trim(edtClienteCodigo.Text) <> '' then
     CarregarCliente;
 end;
@@ -382,6 +387,26 @@ procedure TfrmPedidoGUI.edtValorUnitarioKeyPress(Sender: TObject;
 begin
   if not (CharInSet(Key,['0'..'9',#8, #44, #127])) then
     key := #0;
+end;
+
+procedure TfrmPedidoGUI.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_F9 then // Verifica se a tecla F9 foi pressionada
+  begin
+    if VerificaCamposPedidoProduto then
+  begin
+    if CdsPedidoProduto.State = dsBrowse then
+      cdsPedidoProduto.Append;
+    PopularCdsPedidoProduto;
+    cdsPedidoProduto.Post;
+    LimpaCamposPedidoProdutos;
+    edtProdutoCodigo.SetFocus;
+  end;// Chame aqui a sua função ou método para salvar o registro
+    // Ex: SalvarRegistro(Self.DataSet, Self.DataModule);
+    MessageDlg('Registro salvo com F9!', mtInformation, [mbOK], 0); // Exemplo de feedback
+    Key := 0; // Opcional: para evitar que outras funções F9 sejam ativadas
+  end;
 end;
 
 procedure TfrmPedidoGUI.FormShow(Sender: TObject);

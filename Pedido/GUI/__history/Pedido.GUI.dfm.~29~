@@ -5,8 +5,8 @@ object frmPedidoGUI: TfrmPedidoGUI
   BorderIcons = [biSystemMenu]
   BorderStyle = bsNone
   Caption = 'Pedido'
-  ClientHeight = 698
-  ClientWidth = 864
+  ClientHeight = 767
+  ClientWidth = 875
   Color = clBtnFace
   Constraints.MinHeight = 576
   Constraints.MinWidth = 815
@@ -21,13 +21,13 @@ object frmPedidoGUI: TfrmPedidoGUI
   object pnlDados: TPanel
     Left = 0
     Top = 87
-    Width = 864
+    Width = 875
     Height = 216
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = 81
     object boxCliente: TGroupBox
+      AlignWithMargins = True
       Left = 14
       Top = 9
       Width = 838
@@ -86,6 +86,7 @@ object frmPedidoGUI: TfrmPedidoGUI
       end
     end
     object boxProduto: TGroupBox
+      AlignWithMargins = True
       Left = 14
       Top = 96
       Width = 838
@@ -216,26 +217,23 @@ object frmPedidoGUI: TfrmPedidoGUI
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 858
+    Width = 869
     Height = 81
     Align = alTop
     BevelOuter = bvNone
     Color = 16051947
     ParentBackground = False
     TabOrder = 1
-    ExplicitLeft = 0
-    ExplicitTop = 0
-    ExplicitWidth = 864
-    object Label1: TLabel
+    object lblNumeroPedido: TLabel
       Left = 161
       Top = 16
-      Width = 44
+      Width = 101
       Height = 15
-      Caption = 'Numero'
+      Caption = 'N'#250'mero do Pedido'
     end
     object Label2: TLabel
-      Left = 161
-      Top = 49
+      Left = 190
+      Top = 45
       Width = 70
       Height = 15
       Caption = 'Data emiss'#227'o'
@@ -260,12 +258,11 @@ object frmPedidoGUI: TfrmPedidoGUI
       Font.Style = [fsBold]
       ParentFont = False
       Layout = tlCenter
-      ExplicitLeft = 14
-      ExplicitTop = -3
+      ExplicitLeft = 42
     end
     object edtNumeroPedido: TEdit
-      Left = 237
-      Top = 12
+      Left = 268
+      Top = 13
       Width = 141
       Height = 23
       Color = clBtnFace
@@ -273,49 +270,54 @@ object frmPedidoGUI: TfrmPedidoGUI
       TabOrder = 0
       OnKeyPress = edtClienteCodigoKeyPress
     end
-    object btConsultaPedido: TButton
-      Left = 599
-      Top = 11
-      Width = 121
-      Height = 25
-      Caption = 'Consultar Pedido'
-      TabOrder = 1
-      OnClick = btConsultaPedidoClick
-    end
-    object btCancelarPedido: TButton
-      Left = 726
-      Top = 11
-      Width = 121
-      Height = 25
-      Caption = 'Cancelar Pedido'
-      TabOrder = 2
-      OnClick = btCancelarPedidoClick
-    end
     object dtpDataEmissao: TDateTimePicker
-      Left = 237
-      Top = 46
+      Left = 268
+      Top = 42
       Width = 141
       Height = 23
       Date = 45596.000000000000000000
       Time = 0.940789710650278700
       Kind = dtkDateTime
-      TabOrder = 3
+      TabOrder = 1
+    end
+    object Panel5: TPanel
+      Left = 742
+      Top = 0
+      Width = 127
+      Height = 81
+      Align = alRight
+      BevelOuter = bvNone
+      Color = 16051947
+      ParentBackground = False
+      TabOrder = 2
+      object btnConsultaPedido: TSpeedButton
+        Left = 0
+        Top = 0
+        Width = 127
+        Height = 81
+        Align = alClient
+        Caption = 'BUSCAR'
+        OnClick = btnConsultaPedidoClick
+        ExplicitLeft = 32
+        ExplicitTop = 32
+        ExplicitWidth = 23
+        ExplicitHeight = 22
+      end
     end
   end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 630
-    Width = 864
+    Top = 698
+    Width = 875
     Height = 68
-    Align = alBottom
+    Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 696
     object SpeedButton1: TSpeedButton
       AlignWithMargins = True
-      Left = 731
+      Left = 745
       Top = 0
-      Width = 133
+      Width = 130
       Height = 68
       Margins.Left = 1
       Margins.Top = 0
@@ -323,33 +325,92 @@ object frmPedidoGUI: TfrmPedidoGUI
       Margins.Bottom = 0
       Align = alRight
       Caption = 'Cancelar Opera'#231#227'o'
+      Flat = True
       OnClick = SpeedButton1Click
-      ExplicitLeft = 888
+      ExplicitLeft = 734
     end
-    object btnGravarPedido: TSpeedButton
-      Left = 630
+    object pnlBtnExcluir: TPanel
+      AlignWithMargins = True
+      Left = 131
       Top = 0
-      Width = 100
+      Width = 133
       Height = 68
-      Align = alRight
-      Caption = 'Gravar Pedido'
-      OnClick = btnGravarPedidoClick
-      ExplicitLeft = 631
+      Margins.Left = 1
+      Margins.Top = 0
+      Margins.Right = 0
+      Margins.Bottom = 0
+      Align = alLeft
+      BevelOuter = bvNone
+      Color = 6906591
+      ParentBackground = False
+      TabOrder = 0
+      object btnExcluirPedido: TSpeedButton
+        Left = 0
+        Top = 0
+        Width = 133
+        Height = 68
+        Align = alClient
+        Caption = 'Excluir Pedido'
+        Flat = True
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -19
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        OnClick = btnExcluirPedidoClick
+        ExplicitLeft = 631
+        ExplicitWidth = 100
+      end
+    end
+    object pnlBtnGravar: TPanel
+      AlignWithMargins = True
+      Left = 0
+      Top = 0
+      Width = 130
+      Height = 68
+      Margins.Left = 0
+      Margins.Top = 0
+      Margins.Right = 0
+      Margins.Bottom = 0
+      Align = alLeft
+      BevelOuter = bvNone
+      Color = 16475988
+      ParentBackground = False
+      TabOrder = 1
+      object btnGravarPedido: TSpeedButton
+        Left = 0
+        Top = 0
+        Width = 130
+        Height = 68
+        Align = alClient
+        Caption = 'Gravar Pedido'
+        Flat = True
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -19
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        OnClick = btnGravarPedidoClick
+        ExplicitLeft = 521
+        ExplicitTop = -8
+        ExplicitWidth = 100
+      end
     end
   end
-  object Panel1: TPanel
+  object pnl: TPanel
     Left = 0
     Top = 303
-    Width = 864
+    Width = 875
     Height = 323
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 3
-    ExplicitTop = 337
     object DBGrid1: TDBGrid
       Left = 0
       Top = 0
-      Width = 864
+      Width = 875
       Height = 323
       Align = alClient
       DataSource = DsPedidoProduto
@@ -360,20 +421,63 @@ object frmPedidoGUI: TfrmPedidoGUI
       TitleFont.Height = -12
       TitleFont.Name = 'Segoe UI'
       TitleFont.Style = []
+      OnDblClick = DBGrid1DblClick
+      OnKeyDown = DBGrid1KeyDown
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'CODIGO'
+          Title.Caption = 'C'#243'digo'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NUMERO_PEDIDO'
+          Title.Caption = 'N'#250'm. Pedido'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CODIGO_PRODUTO'
+          Title.Caption = 'C'#243'd. Produto'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DESCRICAO_PRODUTO'
+          Title.Caption = 'Descri'#231#227'o Produto'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'QUANTIDADE'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'VALOR_UNITARIO'
+          Title.Caption = 'Valor Unit'#225'rio'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'VALOR_TOTAL'
+          Title.Caption = 'Valor Total'
+          Visible = True
+        end>
     end
   end
-  object Panel3: TPanel
+  object pnlValor: TPanel
     Left = 0
-    Top = 558
-    Width = 864
+    Top = 626
+    Width = 875
     Height = 72
-    Align = alBottom
+    Align = alTop
     Color = 16051947
     ParentBackground = False
     TabOrder = 4
-    ExplicitTop = 624
     object Panel4: TPanel
-      Left = 536
+      Left = 547
       Top = 1
       Width = 327
       Height = 70
@@ -438,8 +542,8 @@ object frmPedidoGUI: TfrmPedidoGUI
     Params = <>
     AfterPost = CdsPedidoProdutoAfterPost
     AfterDelete = CdsPedidoProdutoAfterDelete
-    Left = 796
-    Top = 579
+    Left = 772
+    Top = 563
     object CdsPedidoProdutoCODIGO: TIntegerField
       DisplayLabel = 'Codigo'
       FieldName = 'CODIGO'
