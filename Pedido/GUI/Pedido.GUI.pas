@@ -25,7 +25,6 @@ type
     CdsPedidoProdutoVALOR_TOTAL: TCurrencyField;
     pnlHeader: TPanel;
     pnlBotoes: TPanel;
-    SpeedButton1: TSpeedButton;
     lblNumeroPedido: TLabel;
     edtNumeroPedido: TEdit;
     Label2: TLabel;
@@ -60,6 +59,8 @@ type
     btnExcluirPedido: TSpeedButton;
     pnlBtnGravar: TPanel;
     btnGravarPedido: TSpeedButton;
+    Panel1: TPanel;
+    btnCancelar: TSpeedButton;
     procedure btClienteClick(Sender: TObject);
     procedure edtClienteCodigoExit(Sender: TObject);
     procedure edtClienteCodigoKeyPress(Sender: TObject; var Key: Char);
@@ -76,11 +77,12 @@ type
     procedure grdProdutoKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure CdsPedidoProdutoAfterDelete(DataSet: TDataSet);
-    procedure SpeedButton1Click(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
     procedure btnGravarPedidoClick(Sender: TObject);
     procedure btnExcluirPedidoClick(Sender: TObject);
     procedure btnConsultaPedidoClick(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     FCodigoPedidoProduto: Integer;
@@ -98,6 +100,8 @@ type
     procedure PopularCdsPedidoProduto(pNumeroPedido: Integer;
       pListaPedidoProduto : TListaPedidoProduto); overload;
     procedure AlterarItemPedidoProduto();
+    procedure ConsultaPedido;
+    procedure ExcluiPedido;
   public
     { Public declarations }
   end;
@@ -170,6 +174,11 @@ begin
 end;
 
 procedure TfrmPedidoGUI.btnExcluirPedidoClick(Sender: TObject);
+begin
+ExcluiPedido;
+end;
+
+procedure TfrmPedidoGUI.ExcluiPedido;
 var
   lFrmPedidoConsultaGUI : TfrmPedidoConsultaGUI;
   lPedido: TPedidoDominio;
@@ -184,19 +193,19 @@ begin
       try
         lPedidoControlador.ObterPedido(lPedido.NumeroPedido, lPedido, False);
         if lPedido.NumeroPedido = 0 then
-          MessageDlg('Numero do pedido não encontrado!', TMsgDlgType.mtWarning, [mbOK], 0)
+          MessageDlg('Número do pedido não encontrado!', TMsgDlgType.mtWarning, [mbOK], 0)
         else
         begin
           LimpaCampos;
           lPedidoControlador.Excluir(lPedido.NumeroPedido);
-          MessageDlg('Pedido de numero '+lPedido.NumeroPedido.ToString+
+          MessageDlg('Pedido de número '+lPedido.NumeroPedido.ToString+
             ' cancelado com sucesso !', TMsgDlgType.mtInformation, [mbOK], 0);
         end;
       except
         on E: Exception do
         begin
-          MessageDlg('Erro ao cancelar pedido de numero '+lPedido.NumeroPedido.ToString+
-            ' ! mensagem tecnica: '+E.Message, TMsgDlgType.mtError, [mbOK], 0);
+          MessageDlg('Erro ao cancelar pedido de número '+lPedido.NumeroPedido.ToString+
+            E.Message, TMsgDlgType.mtError, [mbOK], 0);
         end;
       end;
     end;
@@ -223,7 +232,7 @@ begin
     lPedidoControlador.Salvar(lPedido);
     edtNumeroPedido.Text := lPedido.NumeroPedido.ToString;
     MessageDlg('Pedido de Numero: '+lPedido.NumeroPedido.ToString+
-      ' salva com sucesso !', TMsgDlgType.mtInformation, [mbOK], 0);
+      ' salvo com sucesso !', TMsgDlgType.mtInformation, [mbOK], 0);
     LimpaCampos;
   finally
     FreeAndNil(lPedido);
@@ -293,7 +302,7 @@ begin
     lClienteControlador.ObterCliente(StrToInt(edtClienteCodigo.Text), lCliente);
     if lCliente.Codigo = 0 then
     begin
-      messageDLG('Codigo do cliente não encontrado!',TMsgDlgType.mtWarning,[mbOK],0);
+      messageDLG('Código do cliente não encontrado!',TMsgDlgType.mtWarning,[mbOK],0);
       edtClienteCodigo.SetFocus;
     end
     else
@@ -316,7 +325,7 @@ begin
     lProdutoControlador.ObterProduto(StrToInt(edtProdutoCodigo.Text), lProduto);
     if lProduto.Codigo = 0 then
     begin
-      messageDLG('Codigo do produto não encontrado!',TMsgDlgType.mtWarning,[mbOK],0);
+      messageDLG('Código do produto não encontrado!',TMsgDlgType.mtWarning,[mbOK],0);
       edtProdutoCodigo.SetFocus;
     end
     else
@@ -363,7 +372,7 @@ var
   lFlag : boolean;
 begin
   lFlag := Trim(edtClienteCodigo.Text) = '';
-  btnConsultaPedido.Visible := lFlag;
+  //btnConsultaPedido.Visible := lFlag;
   //btnExcluirPedido.Visible := lFlag;
   if Trim(edtClienteCodigo.Text) <> '' then
     CarregarCliente;
@@ -392,22 +401,51 @@ end;
 procedure TfrmPedidoGUI.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if Key = VK_F9 then // Verifica se a tecla F9 foi pressionada
+  if Key = VK_ESCAPE then
   begin
+    ShowMessage('Operação cancelada.');
+    LimpaCampos;
+  end;
+
+  if Key = VK_F9 then
+  begin
+    if cdsPedidoProduto.IsEmpty then
+    exit;
+
     if VerificaCamposPedidoProduto then
+    begin
+      if CdsPedidoProduto.State = dsBrowse then
+        cdsPedidoProduto.Append;
+        PopularCdsPedidoProduto;
+        cdsPedidoProduto.Post;
+        LimpaCamposPedidoProdutos;
+        edtProdutoCodigo.SetFocus;
+    end;
+
+    MessageDlg('Registro salvo com sucesso.', mtInformation, [mbOK], 0);
+    Key := 0;
+  end;
+
+  if Key = VK_F2 then
+    begin
+      ConsultaPedido;
+    end;
+
+  if key = VK_F5 then
   begin
-    if CdsPedidoProduto.State = dsBrowse then
-      cdsPedidoProduto.Append;
-    PopularCdsPedidoProduto;
-    cdsPedidoProduto.Post;
-    LimpaCamposPedidoProdutos;
-    edtProdutoCodigo.SetFocus;
-  end;// Chame aqui a sua função ou método para salvar o registro
-    // Ex: SalvarRegistro(Self.DataSet, Self.DataModule);
-    MessageDlg('Registro salvo com F9!', mtInformation, [mbOK], 0); // Exemplo de feedback
-    Key := 0; // Opcional: para evitar que outras funções F9 sejam ativadas
+    ExcluiPedido;
   end;
 end;
+
+procedure TfrmPedidoGUI.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if Key = #13 then
+  begin
+    SelectNext(ActiveControl as TWinControl, True, True);
+    Key := #0;
+  end;
+end;
+
 
 procedure TfrmPedidoGUI.FormShow(Sender: TObject);
 begin
@@ -415,6 +453,7 @@ begin
   CdsPedidoProduto.Close;
   CdsPedidoProduto.CreateDataSet;
   CdsPedidoProduto.Open;
+  edtClienteCodigo.SetFocus;
 end;
 
 procedure TfrmPedidoGUI.InicializaVariaveis;
@@ -435,6 +474,7 @@ begin
   CdsPedidoProduto.Close;
   CdsPedidoProduto.CreateDataSet;
   edtValorTotalPedido.Text := '';
+  edtClienteCodigo.SetFocus;
 end;
 
 procedure TfrmPedidoGUI.LimpaCamposPedidoProdutos;
@@ -504,18 +544,24 @@ begin
   pPedido.ValorTotal := StrToCurr(StringReplace(edtValorTotalPedido.Text,'.','', [rfReplaceAll]));
 end;
 
-procedure TfrmPedidoGUI.SpeedButton1Click(Sender: TObject);
+procedure TfrmPedidoGUI.btnCancelarClick(Sender: TObject);
 begin
   LimpaCampos;
 end;
 
 procedure TfrmPedidoGUI.btnConsultaPedidoClick(Sender: TObject);
+begin
+  ConsultaPedido;
+
+end;
+
+procedure TfrmPedidoGUI.ConsultaPedido;
 var
   lFrmPedidoConsultaGUI : TfrmPedidoConsultaGUI;
   lPedido: TPedidoDominio;
   lPedidoControlador: TPedidoControlador;
 begin
-   lPedido := TPedidoDominio.Create;
+  lPedido := TPedidoDominio.Create;
   lPedidoControlador := TPedidoControlador.Create;
   lFrmPedidoConsultaGUI := TfrmPedidoConsultaGUI.Create(self, lPedido, otpConsulta);
   try
@@ -525,14 +571,14 @@ begin
         LimpaCampos;
         lPedidoControlador.ObterPedido(lPedido.NumeroPedido, lPedido);
         if lPedido.NumeroPedido = 0 then
-          MessageDlg('Numero do pedido não encontrado!', TMsgDlgType.mtWarning, [mbOK], 0)
+          MessageDlg('Número do pedido não encontrado!', TMsgDlgType.mtWarning, [mbOK], 0)
         else
           PopularControles(lPedido);
       except
         on E: Exception do
         begin
-          MessageDlg('Erro ao consultar pedido de numero '+lPedido.NumeroPedido.ToString+
-            ' ! mensagem tecnica: '+E.Message, TMsgDlgType.mtError, [mbOK], 0);
+          MessageDlg('Erro ao consultar pedido de número: '+lPedido.NumeroPedido.ToString+
+          E.Message, TMsgDlgType.mtError, [mbOK], 0);
         end;
       end;
     end;
@@ -543,32 +589,37 @@ begin
   end;
 end;
 
+
 function TfrmPedidoGUI.VerificaCamposPedidoProduto: boolean;
 begin
   Result := True;
   if edtProdutoCodigo.Text = '' then
   begin
-    MessageDlg('Codigo do produto não informado! Preencha. ', TMsgDlgType.mtWarning, [mbOK], 0);
+    MessageDlg('Codigo do produto não informado! Preencher. ', TMsgDlgType.mtWarning, [mbOK], 0);
     edtProdutoCodigo.SetFocus;
     Result := false;
+    exit;
   end
   else if edtProdutoDescricao.Text = '' then
   begin
-    MessageDlg('Descricao do produto não informado! Preencha. ', TMsgDlgType.mtWarning, [mbOK], 0);
+    MessageDlg('Descrição do produto não informado! Preencher. ', TMsgDlgType.mtWarning, [mbOK], 0);
     edtProdutoCodigo.SetFocus;
     Result := false;
+    exit;
   end
   else if edtValorUnitario.Text = '' then
   begin
-    MessageDlg('Valor unitario não informado! Preencha. ', TMsgDlgType.mtWarning, [mbOK], 0);
+    MessageDlg('Valor unitário não informado! Preencher. ', TMsgDlgType.mtWarning, [mbOK], 0);
     edtValorUnitario.SetFocus;
     Result := false;
+    exit;
   end
   else if edtQuantidade.Text = '' then
   begin
-    MessageDlg('Quantidade não informado! Preencha. ', TMsgDlgType.mtWarning, [mbOK], 0);
+    MessageDlg('Quantidade não informado! Preencher. ', TMsgDlgType.mtWarning, [mbOK], 0);
     edtQuantidade.SetFocus;
     Result := false;
+    exit;
   end
 end;
 

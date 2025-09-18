@@ -25,7 +25,7 @@ type
     procedure SpeedButton1Click(Sender: TObject);
     procedure CategoryMenuButtonsCategories0Items0Click(Sender: TObject);
     procedure CategoryMenuButtonsCategories0Items1Click(Sender: TObject);
-    procedure FormShow(Sender: TObject);
+    procedure TimerTimer(Sender: TObject);
   private
     { Private declarations }
   public
@@ -53,15 +53,15 @@ begin
   Application.Terminate;
 end;
 
-procedure TfrmPrincipal.FormShow(Sender: TObject);
-begin
- sbarFooter.Panels.Items[0].Text := FormatDateTime ('dddd", "dd" de "mmmm" de "yyyy',now);
- sbarFooter.Panels.Items[1].Text := TimeToStr(Time);
-end;
-
 procedure TfrmPrincipal.SpeedButton1Click(Sender: TObject);
 begin
   sMenu.Opened := NOT sMenu.Opened;
+end;
+
+procedure TfrmPrincipal.TimerTimer(Sender: TObject);
+begin
+  sbarFooter.Panels.Items[0].Text := FormatDateTime ('dddd", "dd" de "mmmm" de "yyyy',now);
+  sbarFooter.Panels.Items[1].Text := TimeToStr(Time);
 end;
 
 end.

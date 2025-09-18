@@ -1,0 +1,61 @@
+object frmPedidoConsultaGUI: TfrmPedidoConsultaGUI
+  Left = 0
+  Top = 0
+  Caption = 'Consulta pedido'
+  ClientHeight = 148
+  ClientWidth = 312
+  Color = clBtnFace
+  Constraints.MinHeight = 151
+  Constraints.MinWidth = 328
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  Position = poScreenCenter
+  OnShow = FormShow
+  TextHeight = 15
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 312
+    Height = 148
+    Align = alClient
+    TabOrder = 0
+    ExplicitWidth = 316
+    ExplicitHeight = 113
+    object Label1: TLabel
+      Left = 16
+      Top = 24
+      Width = 101
+      Height = 15
+      Caption = 'Numero do Pedido'
+    end
+    object edtNumeroPedido: TEdit
+      Left = 133
+      Top = 21
+      Width = 134
+      Height = 23
+      TabOrder = 0
+      OnKeyPress = edtNumeroPedidoKeyPress
+    end
+    object btConfirmar: TButton
+      Left = 64
+      Top = 71
+      Width = 75
+      Height = 25
+      Caption = 'Confirmar'
+      TabOrder = 1
+      OnClick = btConfirmarClick
+    end
+    object btCancelar: TButton
+      Left = 168
+      Top = 71
+      Width = 75
+      Height = 25
+      Caption = 'Cancelar'
+      TabOrder = 2
+      OnClick = btCancelarClick
+    end
+  end
+end

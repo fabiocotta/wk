@@ -9,15 +9,17 @@ uses
 
 type
   TfrmPedidoConsultaGUI = class(TForm)
-    Panel1: TPanel;
+    pnlMain: TPanel;
     Label1: TLabel;
     edtNumeroPedido: TEdit;
+    Panel1: TPanel;
     btConfirmar: TButton;
     btCancelar: TButton;
     procedure edtNumeroPedidoKeyPress(Sender: TObject; var Key: Char);
     procedure btConfirmarClick(Sender: TObject);
     procedure btCancelarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     FPedido: TPedidoDominio;
@@ -64,12 +66,22 @@ begin
     key := #0;
 end;
 
+procedure TfrmPedidoConsultaGUI.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if Key = #13 then
+  begin
+    SelectNext(ActiveControl as TWinControl, True, True);
+    Key := #0;
+  end;
+
+end;
+
 procedure TfrmPedidoConsultaGUI.FormShow(Sender: TObject);
 begin
   if FOperacao = otpConsulta then
-    self.Caption := 'Consulta pedido'
+    self.Caption := 'Consultar Pedido'
   else
-    self.Caption := 'Cancelamento de pedido';
+    self.Caption := 'Cancelar Pedido';
 end;
 
 function TfrmPedidoConsultaGUI.VerificaCampos: boolean;

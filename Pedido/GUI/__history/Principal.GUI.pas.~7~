@@ -1,0 +1,67 @@
+unit Principal.GUI;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.CategoryButtons,
+  Vcl.Buttons, Vcl.WinXCtrls, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.Imaging.pngimage,
+  System.ImageList, Vcl.ImgList;
+
+type
+  TfrmPrincipal = class(TForm)
+    ImageList: TImageList;
+    pTela: TPanel;
+    pNavbar: TPanel;
+    pUsuario: TPanel;
+    pContainer: TPanel;
+    sbarFooter: TStatusBar;
+    sMenu: TSplitView;
+    pLogo: TPanel;
+    imgLogo: TImage;
+    SpeedButton1: TSpeedButton;
+    CategoryMenuButtons: TCategoryButtons;
+    Timer: TTimer;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure CategoryMenuButtonsCategories0Items0Click(Sender: TObject);
+    procedure CategoryMenuButtonsCategories0Items1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPrincipal: TfrmPrincipal;
+
+implementation
+
+{$R *.dfm}
+
+uses Pedido.GUI, Vcl.Navigation;
+
+procedure TfrmPrincipal.CategoryMenuButtonsCategories0Items0Click(
+  Sender: TObject);
+begin
+   TNavigation.Open(TfrmPedidoGUI, frmPedidoGUI, pContainer);
+end;
+
+procedure TfrmPrincipal.CategoryMenuButtonsCategories0Items1Click(
+  Sender: TObject);
+begin
+  Application.Terminate;
+end;
+
+procedure TfrmPrincipal.FormShow(Sender: TObject);
+begin
+ sbarFooter.Panels.Items[0].Text := FormatDateTime ('dddd", "dd" de "mmmm" de "yyyy',now);
+ sbarFooter.Panels.Items[1].Text := TimeToStr(Time);
+end;
+
+procedure TfrmPrincipal.SpeedButton1Click(Sender: TObject);
+begin
+  sMenu.Opened := NOT sMenu.Opened;
+end;
+
+end.

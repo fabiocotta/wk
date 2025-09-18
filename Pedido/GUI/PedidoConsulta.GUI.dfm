@@ -1,9 +1,10 @@
 object frmPedidoConsultaGUI: TfrmPedidoConsultaGUI
   Left = 0
   Top = 0
-  Caption = 'Consulta pedido'
-  ClientHeight = 148
-  ClientWidth = 312
+  BorderStyle = bsSingle
+  Caption = 'Consultar pedido'
+  ClientHeight = 160
+  ClientWidth = 374
   Color = clBtnFace
   Constraints.MinHeight = 151
   Constraints.MinWidth = 328
@@ -12,50 +13,82 @@ object frmPedidoConsultaGUI: TfrmPedidoConsultaGUI
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  KeyPreview = True
   Position = poScreenCenter
+  OnKeyPress = FormKeyPress
   OnShow = FormShow
   TextHeight = 15
-  object Panel1: TPanel
+  object pnlMain: TPanel
     Left = 0
     Top = 0
-    Width = 312
-    Height = 148
+    Width = 374
+    Height = 160
     Align = alClient
+    BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 316
-    ExplicitHeight = 113
+    ExplicitWidth = 312
+    ExplicitHeight = 148
     object Label1: TLabel
       Left = 16
-      Top = 24
-      Width = 101
+      Top = 40
+      Width = 84
       Height = 15
-      Caption = 'Numero do Pedido'
+      Caption = 'N'#250'mero Pedido'
     end
     object edtNumeroPedido: TEdit
       Left = 133
-      Top = 21
-      Width = 134
-      Height = 23
+      Top = 37
+      Width = 214
+      Height = 28
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 0
       OnKeyPress = edtNumeroPedidoKeyPress
     end
-    object btConfirmar: TButton
-      Left = 64
-      Top = 71
-      Width = 75
-      Height = 25
-      Caption = 'Confirmar'
+    object Panel1: TPanel
+      Left = 0
+      Top = 90
+      Width = 374
+      Height = 70
+      Align = alBottom
+      BevelOuter = bvNone
       TabOrder = 1
-      OnClick = btConfirmarClick
-    end
-    object btCancelar: TButton
-      Left = 168
-      Top = 71
-      Width = 75
-      Height = 25
-      Caption = 'Cancelar'
-      TabOrder = 2
-      OnClick = btCancelarClick
+      ExplicitTop = 200
+      ExplicitWidth = 521
+      object btConfirmar: TButton
+        Left = 133
+        Top = 0
+        Width = 101
+        Height = 65
+        Caption = 'Consultar'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -19
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        OnClick = btConfirmarClick
+      end
+      object btCancelar: TButton
+        Left = 240
+        Top = 0
+        Width = 107
+        Height = 65
+        Caption = 'Cancelar'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -19
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        OnClick = btCancelarClick
+      end
     end
   end
 end

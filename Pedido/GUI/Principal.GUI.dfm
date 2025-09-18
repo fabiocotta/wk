@@ -75,11 +75,11 @@ object frmPrincipal: TfrmPrincipal
     Panels = <
       item
         Text = 'Data'
-        Width = 190
+        Width = 200
       end
       item
         Text = 'Time'
-        Width = 50
+        Width = 90
       end>
   end
   object sMenu: TSplitView
@@ -2690,6 +2690,7 @@ object frmPrincipal: TfrmPrincipal
       000000000000}
   end
   object Timer: TTimer
+    OnTimer = TimerTimer
     Left = 856
     Top = 207
   end
